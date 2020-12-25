@@ -43,7 +43,7 @@ IF [%option%]==[make]   (call :MAKE)
 IF [%option%]==[help]   (call :HELP)
 IF [%option%]==[start]  (call :START)
 IF [%option%]==[run]    (call :MAKE && call :RUN)
-IF [%option%]==[test]   (call :MAKE && call :TEST)
+IF [%option%]==[test]   (call :TEST && call :RUNTESTS)
 IF [%option%]==[clean]  (call :CLEAN)
 goto END
 
@@ -62,9 +62,9 @@ echo *********************************************************************
 goto :EOF
 
 :MAKE
+IF NOT exist %SRC_DIR%   (echo No file to Compile && goto :EOF)
 IF NOT exist %BIN_DIR%   (md %BIN_DIR%)
 IF NOT exist %BUILD_DIR% (md %BUILD_DIR%)
-IF NOT exist %SRC_DIR%   (md %SRC_DIR%)
 cd %SRC_DIR%
 set DEPENDANCIES=
 for %%f in (%SRCFILESEXT%) do (
@@ -89,16 +89,46 @@ goto :EOF
 .\%BUILD_DIR%\%EXEC%
 goto :EOF
 
+:RUNTESTS
+.\%TEST_DIR%\%BUILD_DIR%\%EXEC%
+goto :EOF
+
 :TEST
-echo    COMPILING %TEST_DIR%/%MAIN%.cpp INTO %BIN_DIR%/test.%MAIN%.o
-%CC% -c %TEST_DIR%/%MAIN%.cpp -o %BIN_DIR%/test.%MAIN%.o %CFFLAGS% %CCFLAGS%
+IF NOT exist %TEST_DIR%   (echo No testing directory && goto :EOF)
+cd %TEST_DIR%
+IF NOT exist %BIN_DIR%   (md %BIN_DIR%)
+IF NOT exist %BUILD_DIR% (md %BUILD_DIR%)
+cd ../%SRC_DIR%
+set DEPENDANCIES=
+for %%f in (%SRCFILESEXT%) do (
+    echo    COMPILING %%f INTO %%~nf.o
+    %CC% -c %%f -o ../%TEST_DIR%/%BIN_DIR%/%%~nf.o %CFFLAGS% %CCFLAGS%
+    if NOT [%%~nf]==[%MAIN%] (
+        set DEPENDANCIES=!DEPENDANCIES!%BIN_DIR%/%%~nf.o 
+    )
+)
 echo.
-echo    LINKING %BUILD_DIR%/test.%EXEC% FROM %BIN_DIR%/test.%MAIN%.o AND %DEPENDANCIES%
-%CC% -o %BUILD_DIR%/test.%EXEC% %BIN_DIR%/test.%MAIN%.o %DEPENDANCIES% %LDFLAGS% %CCFLAGS%
-.\%BUILD_DIR%\test.%EXEC%
+cd ../%TEST_DIR%/%SRC_DIR%
+set TESTDEPENDANCIES=
+for %%f in (%SRCFILESEXT%) do (
+    echo    COMPILING %%f INTO %%~nf.o
+    %CC% -c %%f -o ../%BIN_DIR%/%%~nf.o %CFFLAGS% %CCFLAGS%
+    if NOT [%%~nf]==[%MAIN%] (
+        set TESTDEPENDANCIES=!TESTDEPENDANCIES!%BIN_DIR%/%%~nf.o 
+    )
+)
+echo.
+cd ..
+echo    LINKING %BUILD_DIR%/%EXEC% FROM %BIN_DIR%/%MAIN%.o AND %DEPENDANCIES%
+%CC% -o %BUILD_DIR%/%EXEC% %BIN_DIR%/%MAIN%.o %DEPENDANCIES% %TESTDEPENDANCIES% %LDFLAGS% %CCFLAGS%
+echo.
+cd ..
 goto :EOF
 
 :CLEAN
+IF exist %BIN_DIR%   (rmdir %BIN_DIR% /q /s)
+IF exist %BUILD_DIR% (rmdir %BUILD_DIR% /q /s)
+cd %TEST_DIR%
 IF exist %BIN_DIR%   (rmdir %BIN_DIR% /q /s)
 IF exist %BUILD_DIR% (rmdir %BUILD_DIR% /q /s)
 goto :EOF
