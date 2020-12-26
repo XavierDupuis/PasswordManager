@@ -493,10 +493,3 @@ void AES::printHexArray (unsigned char a[], unsigned int n)
 	  printf("%02x ", a[i]);
 	}
 }
-
-
-
-
-
-
-
