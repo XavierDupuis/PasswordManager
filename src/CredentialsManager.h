@@ -1,17 +1,25 @@
 #ifndef CREDENTIALSMANAGER_H
 #define CREDENTIALSMANAGER_H
 
-#include <iostream>
 #include <vector>
-#include <unordered_map>
+#include <unordered_set>
+#include <memory>
+#include <string>
+
+#include "Credentials.h"
+#include "ExceptCredentialsError.h"
 
 class CredentialsManager 
 {
 public:
     CredentialsManager();
 
+    bool addCredentials(Credentials& credentials);
+    bool updateCredentials(Credentials& credentials);
+    bool removeCredentials(unsigned char domain);
+
 private:
-    std::unordered_map<std::string,std::vector<unsigned char>> credentials_;
+    std::unordered_set<std::unique_ptr<Credentials>> credentials_;
 };
 
 #endif //CREDENTIALSMANAGER_H

@@ -4,7 +4,7 @@ Credentials::Credentials(std::pair<unsigned char*, unsigned> domain, std::pair<u
     : domain_(domain)
 {
     //unsigned int* outLen = new unsigned int;
-    password_.first = EncryptECB(password.first, password.second, key, password_.second); 
+    password_.first = EncryptECB(password.first, password.second * sizeof(unsigned char), key, password_.second); 
     //password_.second = *outLen;
     //delete outLen;
 }
@@ -14,17 +14,40 @@ Credentials::Credentials(std::pair<unsigned char*, unsigned> domain, std::pair<u
     , password_(password)
 {}
 
-unsigned char* Credentials::getDomain()
+Credentials::~Credentials()
 {
-    return domain_.first;
+    for(unsigned i = 0; i < password_.second; i++)
+    {
+        *password_.first++ = '\0';
+    }
+    password_.first = nullptr;
+    password_.second = 0;
+
+    for(unsigned i = 0; i < domain_.second; i++)
+    {
+        *domain_.first++ = '\0';
+    }
+    domain_.first = nullptr;
+    domain_.second = 0;
 }
 
-unsigned char* Credentials::getEncryptedPassword()
+std::ostream& operator<<(std::ostream& out, const Credentials& credentials)
 {
-    return password_.first;
+    out << "\"" << credentials.domain_.first << "\" " << credentials.password_.first << std::endl;
+    return out;
 }
 
-unsigned char* Credentials::getDecryptedPassword(unsigned char* key)
+std::pair<unsigned char*, unsigned> Credentials::getDomain()
 {
-    return DecryptECB(password_.first, password_.second, key); 
+    return domain_;
+}
+
+std::pair<unsigned char*, unsigned> Credentials::getEncryptedPassword()
+{
+    return password_;
+}
+
+std::pair<unsigned char*, unsigned> Credentials::getDecryptedPassword(unsigned char* key)
+{
+    return make_pair(DecryptECB(password_.first, password_.second * sizeof(unsigned char), key), password_.second); 
 }

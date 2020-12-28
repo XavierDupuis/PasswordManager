@@ -90,7 +90,8 @@ goto :EOF
 goto :EOF
 
 :RUNTESTS
-.\%TEST_DIR%\%BUILD_DIR%\%EXEC%
+cd %TEST_DIR%
+call :RUN
 goto :EOF
 
 :TEST

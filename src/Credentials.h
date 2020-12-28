@@ -13,9 +13,13 @@ public:
     // Preexisting credentials constructor
     Credentials(std::pair<unsigned char*, unsigned> domain, std::pair<unsigned char*, unsigned> password);
 
-    unsigned char* getDomain();
-    unsigned char* getEncryptedPassword();
-    unsigned char* getDecryptedPassword(unsigned char* key);
+    ~Credentials();
+
+    friend std::ostream& operator<<(std::ostream& out, const Credentials& credentials);
+
+    std::pair<unsigned char*, unsigned> getDomain();
+    std::pair<unsigned char*, unsigned> getEncryptedPassword();
+    std::pair<unsigned char*, unsigned> getDecryptedPassword(unsigned char* key);
 
 private:
     std::pair<unsigned char*, unsigned> domain_;
