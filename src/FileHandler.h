@@ -6,14 +6,15 @@
 #include <fstream>
 #include <sstream>
 
+#include "CredentialsManager.h"
 #include "ExceptBadFileAccess.h"
 
 class FileHandler 
 {
 public:
     FileHandler(std::string filename);
-    bool readFile();
-    bool writeFile();
+    bool readFile(CredentialsManager& credentialsManager);
+    bool writeFile(CredentialsManager& credentialsManager);
 
 private:
     std::string filename_;

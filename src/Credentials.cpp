@@ -33,7 +33,20 @@ Credentials::~Credentials()
 
 std::ostream& operator<<(std::ostream& out, const Credentials& credentials)
 {
-    out << "\"" << credentials.domain_.first << "\" " << credentials.password_.first << std::endl;
+    out << "\"";
+    unsigned char* ptr = credentials.domain_.first;
+    for(unsigned i = 0; i < credentials.domain_.second; i++)
+    {
+        out << *ptr++;
+    }
+    out << "\" ";
+    ptr = credentials.password_.first;
+    for(unsigned j = 0; j < credentials.password_.second; j++)
+    {
+        out << std::setfill('0') << std::uppercase << std::setw(2) << std::hex << unsigned(*ptr++) << " ";
+    }
+    ptr = nullptr;
+    out << std::endl;
     return out;
 }
 

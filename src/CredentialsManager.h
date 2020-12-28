@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Credentials.h"
+#include "Utility.h"
 #include "ExceptCredentialsError.h"
 
 class CredentialsManager 
@@ -14,12 +15,16 @@ class CredentialsManager
 public:
     CredentialsManager();
 
+    bool findCredentials(Credentials& credentials);
     bool addCredentials(Credentials& credentials);
     bool updateCredentials(Credentials& credentials);
-    bool removeCredentials(unsigned char domain);
+    bool removeCredentials(Credentials& credentials);
+
+    std::unordered_set<std::unique_ptr<Credentials>>& getCredentials();
 
 private:
     std::unordered_set<std::unique_ptr<Credentials>> credentials_;
+    std::unordered_set<std::string> credentialsDomains_;
 };
 
 #endif //CREDENTIALSMANAGER_H

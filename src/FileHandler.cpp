@@ -5,7 +5,7 @@ FileHandler::FileHandler(std::string filename = "data.txt")
 {
 }
 
-bool FileHandler::readFile()
+bool FileHandler::readFile(CredentialsManager& credentialsManager)
 {
     // Open file
     std::ifstream f(filename_);
@@ -15,35 +15,37 @@ bool FileHandler::readFile()
     }
 
     //Local Variables
-    std::string domain;
     std::string ligne;
+    std::string domain;
+    std::string value;
+    std::string password;
 
     //Get each line from .txt
     while(std::getline(f,ligne)) 
     {
         std::istringstream stream(ligne);
-        getline(stream, domain, ' ');
-        stream >> domain;
+        stream >> std::quoted(domain);
+        while(stream >> value)
+        {
+            password += value;
+        }
         stream.ignore();
-        //taskManager.addTask(std::make_unique<Task>(name, weight, value));
     }
     f.close();
     return true;
 }
 
-bool FileHandler::writeFile()
+bool FileHandler::writeFile(CredentialsManager& credentialsManager)
 {
     std::ofstream f(filename_);
     if(!f)
     {
         BadFileAccess("File " + filename_ + " couldn't be overwritten.").raise();
     }
-    /*for(auto& it : taskManager.getTasks())
+    for(auto& it : credentialsManager.getCredentials())
     {
-        f << it.get()->name_     << ";" << 
-             it.get()->weight_   << ";" << 
-             it.get()->value_    << std::endl;
-    }*/
+        f << *it;
+    }
     f.close();
     return true;
 }

@@ -2,6 +2,7 @@
 #define CREDENTIALS_H
 
 #include "AES.h"
+#include <iomanip>
 #include <vector>
 
 class Credentials : public AES
