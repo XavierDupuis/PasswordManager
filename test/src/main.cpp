@@ -32,6 +32,7 @@ int main()
     AES aes(128);  //128 - key length, can be 128, 192 or 256
     unsigned char* c = aes.EncryptECB(plain, plainLen * sizeof(unsigned char), key, outLen);
     unsigned char* d = aes.DecryptECB(c, plainLen * sizeof(unsigned char), key);
+    std::cout << "outLen : " << outLen << std::endl;
     std::cout << "cString : " << CharToString(c, outLen) << " : " << CharToString(c, outLen).size() << std::endl;
     std::cout << "dString : " << CharToString(d, outLen) << " : " << CharToString(d, outLen).size() << std::endl;
 
@@ -48,12 +49,19 @@ int main()
         std::cout << *l++ << " ";
     }
     std::cout << std::endl;
+    for(unsigned i = 0; i < outLenk; i++)
+    {
+        std::cout << *l++ << " ";
+    }
+    std::cout << std::endl;
     //delete k;
     //delete l;
 
     AES user(128);
     std::string stringUser, stringUserKey;
-    std::cin >> stringUser >> stringUserKey;
+    std::getline(cin, stringUser, '\n');
+    std::getline(cin, stringUserKey, '\n');
+    //std::cin >> stringUser >> stringUserKey;
     unsigned int outLenUser = 0;
     unsigned char* m = user.EncryptECB(StringToChar(stringUser), stringUser.size() * sizeof(unsigned char), StringToChar(stringUserKey), outLenUser);
     unsigned char* n = user.DecryptECB(m, stringUser.size() * sizeof(unsigned char), StringToChar(stringUser));
@@ -63,10 +71,12 @@ int main()
     {
         std::cout << *n++ << " ";
     }
+    std::cout << std::endl;
     for(unsigned j = 0; j < stringUser.size(); j++)
     {
         std::cout << stringUser[j] << " ";
     }
+    std::cout << std::endl;
     //delete[] m;
     //delete[] n;
 /*
