@@ -5,11 +5,10 @@
 
 std::string CharToString(unsigned char* ptr);
 
-/*template <typename T>
-T StringToChar(std::string str);*/
+std::string CharToString(unsigned char* ptr, unsigned int len);
+
+unsigned char* StringToChar(std::string str);
 
 std::ostream& operator<<(std::ostream& out, unsigned char* ptr);
-
-//std::istream& operator>>(std::istream& in, unsigned char* ptr);
 
 #endif //UTILITY_H

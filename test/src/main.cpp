@@ -19,20 +19,56 @@ int main()
     CredentialsManager credentialsManager;
     credentialsManager.addCredentials(cred1);
     credentialsManager.addCredentials(cred2);
-    cout << "cred1 : " << cred1;
-    cout << "cred2 : " << cred2;
+
+    std::cout << "cred1 : " << cred1;
+    std::cout << "cred2 : " << cred2;
     FileHandler fileHandler = FileHandler("data.txt");
     fileHandler.writeFile(credentialsManager);
     unsigned char key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
     unsigned int plainLen = 16;  //bytes in plaintext
     unsigned int outLen = 0;  // out param - bytes in сiphertext
 
+
     AES aes(128);  //128 - key length, can be 128, 192 or 256
     unsigned char* c = aes.EncryptECB(plain, plainLen * sizeof(unsigned char), key, outLen);
     unsigned char* d = aes.DecryptECB(c, plainLen * sizeof(unsigned char), key);
+    std::cout << "cString : " << CharToString(c, outLen) << " : " << CharToString(c, outLen).size() << std::endl;
+    std::cout << "dString : " << CharToString(d, outLen) << " : " << CharToString(d, outLen).size() << std::endl;
 
-    std::cout << "cString : " << CharToString(c) << std::endl;
-    std::cout << "dString : " << CharToString(d) << std::endl;
+    AES encryption(128);
+    std::string stringk = "SecurePasswordEncrypter";
+    std::string stringkey = "h(7*HE'u7vSw_$!F";
+    unsigned int outLenk = 0;
+    unsigned char* k = encryption.EncryptECB(StringToChar(stringk), stringk.size() * sizeof(unsigned char), StringToChar(stringk), outLenk);
+    unsigned char* l = encryption.DecryptECB(k, stringk.size() * sizeof(unsigned char), StringToChar(stringk));
+    std::cout << "kString : " << CharToString(k, outLenk) << " : " << CharToString(k, outLenk).size() << std::endl;
+    std::cout << "lString : " << CharToString(l, outLenk) << " : " << CharToString(l, outLenk).size() << std::endl;
+    for(unsigned i = 0; i < stringk.size(); i++)
+    {
+        std::cout << *l++ << " ";
+    }
+    std::cout << std::endl;
+    //delete k;
+    //delete l;
+
+    AES user(128);
+    std::string stringUser, stringUserKey;
+    std::cin >> stringUser >> stringUserKey;
+    unsigned int outLenUser = 0;
+    unsigned char* m = user.EncryptECB(StringToChar(stringUser), stringUser.size() * sizeof(unsigned char), StringToChar(stringUserKey), outLenUser);
+    unsigned char* n = user.DecryptECB(m, stringUser.size() * sizeof(unsigned char), StringToChar(stringUser));
+    std::cout << "stringUser : " << CharToString(m, outLenUser) << " : " << CharToString(m, outLenUser).size() << " : " << outLenUser << std::endl;
+    std::cout << "stringUserKey : " << CharToString(n, outLenUser) << " : " << CharToString(n, outLenUser).size() << std::endl;
+    for(unsigned j = 0; j < stringUser.size(); j++)
+    {
+        std::cout << *n++ << " ";
+    }
+    for(unsigned j = 0; j < stringUser.size(); j++)
+    {
+        std::cout << stringUser[j] << " ";
+    }
+    //delete[] m;
+    //delete[] n;
 /*
     std::cout << "Plaintext : ";
     for (auto& it : plain)

@@ -15,7 +15,6 @@ class CredentialsManager
 public:
     CredentialsManager();
 
-    bool findCredentials(Credentials& credentials);
     bool addCredentials(Credentials& credentials);
     bool updateCredentials(Credentials& credentials);
     bool removeCredentials(Credentials& credentials);
@@ -23,6 +22,8 @@ public:
     std::unordered_set<std::unique_ptr<Credentials>>& getCredentials();
 
 private:
+    bool findCredentials(Credentials& credentials);
+    
     std::unordered_set<std::unique_ptr<Credentials>> credentials_;
     std::unordered_set<std::string> credentialsDomains_;
 };
