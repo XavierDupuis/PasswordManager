@@ -43,6 +43,16 @@ bool CredentialsManager::removeCredentials(Credentials& credentials)
     return true;
 }
 
+std::ostream& operator<<(std::ostream& out, const CredentialsManager& credentialsManager)
+{
+    out << credentialsManager.credentialsDomains_.size() << " credentials registered" << std::endl;
+    for(auto it : credentialsManager.credentialsDomains_)
+    {
+        out << " " << it << std::endl;
+    }
+    return out;
+}
+
 std::unordered_set<std::unique_ptr<Credentials>>& CredentialsManager::getCredentials()
 {
     return credentials_;

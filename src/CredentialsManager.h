@@ -19,6 +19,8 @@ public:
     bool updateCredentials(Credentials& credentials);
     bool removeCredentials(Credentials& credentials);
 
+    friend std::ostream& operator<<(std::ostream& out, const CredentialsManager& credentialsManager);
+
     std::unordered_set<std::unique_ptr<Credentials>>& getCredentials();
 
 private:

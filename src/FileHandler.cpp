@@ -17,7 +17,7 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
     //Local Variables
     std::string ligne;
     std::string domain;
-    std::string value;
+    unsigned char value;
     std::string password;
 
     //Get each line from .txt
@@ -30,6 +30,9 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
             password += value;
         }
         stream.ignore();
+        Credentials cred = {make_pair(StringToChar(domain), domain.size()),
+                            make_pair(StringToChar(password), password.size())};
+        credentialsManager.addCredentials(cred);
     }
     f.close();
     return true;
