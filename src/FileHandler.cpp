@@ -25,7 +25,7 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
     {
         std::istringstream stream(ligne);
         stream >> std::quoted(domain);
-        while(stream >> value)
+        while(stream >> std::hex >> value)
         {
             password += value;
         }

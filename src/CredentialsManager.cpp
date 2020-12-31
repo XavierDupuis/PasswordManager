@@ -48,7 +48,7 @@ std::ostream& operator<<(std::ostream& out, const CredentialsManager& credential
     out << credentialsManager.credentialsDomains_.size() << " credentials registered" << std::endl;
     for(auto it : credentialsManager.credentialsDomains_)
     {
-        out << " " << it << std::endl;
+        out << "   " << it << std::endl;
     }
     return out;
 }
