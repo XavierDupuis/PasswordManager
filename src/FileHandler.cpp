@@ -17,17 +17,21 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
     //Local Variables
     std::string ligne;
     std::string domain;
-    unsigned char value;
     std::string password;
 
+    unsigned char value1, value2;
+    
     //Get each line from .txt
     while(std::getline(f,ligne)) 
     {
         std::istringstream stream(ligne);
         stream >> std::quoted(domain);
-        while(stream >> std::hex >> value)
+        while(stream >> std::hex >> value1 >> value2)
         {
-            password += value;
+            //unsigned char cValue = static_cast<unsigned char>(value);
+            unsigned char cValue = value1 * 16 + value2;
+            password += cValue;
+            //std::cout << cValue << "(dec " << unsigned(cValue) << " == hex " << std::hex << unsigned(cValue) <<  ")" <<  " added. Pass : " << password << std::endl;
         }
         stream.ignore();
         //std::unique_ptr<Credentials> cred = make_unique<Credentials>({make_pair(StringToChar(domain), domain.size()),
@@ -35,6 +39,7 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
         //credentialsManager.addCredentials(cred);
         credentialsManager.addCredentials(make_unique<Credentials>(make_pair(StringToChar(domain), domain.size()),
                             make_pair(StringToChar(password), password.size())));
+        password.clear();
     }
     f.close();
     return true;
