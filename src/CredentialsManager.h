@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "Credentials.h"
 #include "Utility.h"
@@ -19,17 +20,17 @@ public:
     bool updateCredentials(Credentials& credentials);
     bool removeCredentials(Credentials& credentials);
 
-    //bool findCredentials(std::string domain);
+    Credentials* findCredentials(const std::string& domain);
 
     friend std::ostream& operator<<(std::ostream& out, const CredentialsManager& credentialsManager);
 
-    std::unordered_set<unique_ptr<Credentials>>& getCredentials();
+    std::vector<unique_ptr<Credentials>>& getCredentials();
 
 private:
-    bool isCredentialsRegistered(const Credentials& credentials);
-    bool isCredentialsRegistered(const std::string& domain);
+    bool isCredentialsRegistered(const Credentials& credentials) const;
+    bool isCredentialsRegistered(const std::string& domain) const;
     
-    std::unordered_set<unique_ptr<Credentials>> credentials_;
+    std::vector<unique_ptr<Credentials>> credentials_;
     std::unordered_set<std::string> credentialsDomains_;
 };
 

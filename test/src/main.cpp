@@ -76,12 +76,14 @@ int main()
     //delete l;*/
 
     AES user(128);
+
+    //
     std::string sDomain, sPassword, sKey;
-    std::cout << " > Domain   : ";
+    std::cout << " Domain   :\n > ";
     std::getline(cin, sDomain, '\n');
-    std::cout << " > Password : ";
+    std::cout << " Password :\n > ";
     std::getline(cin, sPassword, '\n');
-    std::cout << " > Key      : ";
+    std::cout << " Key      :\n > ";
     std::getline(cin, sKey, '\n');
 
     unsigned int outLenUser = 0;
@@ -102,9 +104,6 @@ int main()
     }
     std::cout << " END" << std::endl;
 
-    /*Credentials newCredentials = {make_pair(StringToChar(sDomain), sDomain.size()), 
-                                  make_pair(StringToChar(sPassword), sPassword.size()),
-                                  StringToChar(sKey)};*/
     credentialsManager.addCredentials(make_unique<Credentials>
         (make_pair(StringToChar(sDomain), sDomain.size()),
          make_pair(StringToChar(sPassword), sPassword.size()),
@@ -117,6 +116,13 @@ int main()
     }
 
     fileHandler.writeFile(credentialsManager);
+
+    std::cout << " Domain   :\n > ";
+    std::getline(cin, sDomain, '\n');
+    std::cout << " Key      :\n > ";
+    std::getline(cin, sKey, '\n');
+    auto output = credentialsManager.findCredentials(sDomain)->getDecryptedPassword(StringToChar(sKey));
+    std::cout << CharToString(output.first, output.second);
 
     //delete[] m;
     //delete[] n;
