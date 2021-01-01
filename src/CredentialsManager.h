@@ -1,8 +1,8 @@
 #ifndef CREDENTIALSMANAGER_H
 #define CREDENTIALSMANAGER_H
 
-#include <vector>
 #include <unordered_set>
+#include <algorithm>
 #include <memory>
 #include <string>
 
@@ -15,18 +15,21 @@ class CredentialsManager
 public:
     CredentialsManager();
 
-    bool addCredentials(Credentials& credentials);
+    bool addCredentials(std::unique_ptr<Credentials> credentials);
     bool updateCredentials(Credentials& credentials);
     bool removeCredentials(Credentials& credentials);
 
+    //bool findCredentials(std::string domain);
+
     friend std::ostream& operator<<(std::ostream& out, const CredentialsManager& credentialsManager);
 
-    std::unordered_set<std::unique_ptr<Credentials>>& getCredentials();
+    std::unordered_set<unique_ptr<Credentials>>& getCredentials();
 
 private:
-    bool findCredentials(Credentials& credentials);
+    bool isCredentialsRegistered(const Credentials& credentials);
+    bool isCredentialsRegistered(const std::string& domain);
     
-    std::unordered_set<std::unique_ptr<Credentials>> credentials_;
+    std::unordered_set<unique_ptr<Credentials>> credentials_;
     std::unordered_set<std::string> credentialsDomains_;
 };
 

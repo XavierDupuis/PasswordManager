@@ -30,9 +30,11 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
             password += value;
         }
         stream.ignore();
-        Credentials cred = {make_pair(StringToChar(domain), domain.size()),
-                            make_pair(StringToChar(password), password.size())};
-        credentialsManager.addCredentials(cred);
+        //std::unique_ptr<Credentials> cred = make_unique<Credentials>({make_pair(StringToChar(domain), domain.size()),
+        //                    make_pair(StringToChar(password), password.size())});
+        //credentialsManager.addCredentials(cred);
+        credentialsManager.addCredentials(make_unique<Credentials>(make_pair(StringToChar(domain), domain.size()),
+                            make_pair(StringToChar(password), password.size())));
     }
     f.close();
     return true;

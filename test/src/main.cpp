@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+#include <memory>
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
     fileHandler.readFile(credentialsManager);
     std::cout << credentialsManager;
 
+    std::ofstream f("test.txt");
     unsigned char plain[] = { 'A', 'B', 'C', 'D', 
                               'E', 'F', 'G', 'H', 
                               'I', 'J', 'K', 'L', 
@@ -35,7 +37,7 @@ int main()
     std::cout << "cred3 : " << cred3;
     fileHandler.writeFile(credentialsManager);*/
 
-    unsigned char key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
+    /*unsigned char key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
     unsigned int plainLen = 16;  //bytes in plaintext
     unsigned int outLen = 0;  // out param - bytes in сiphertext
 
@@ -47,7 +49,6 @@ int main()
     std::cout << "cString : " << CharToString(c, outLen) << " : " << CharToString(c, outLen).size() << std::endl;
     std::cout << "dString : " << CharToString(d, outLen) << " : " << CharToString(d, outLen).size() << std::endl;
 
-    std::ofstream f("test.txt");
 
     AES encryption(128);
     std::string stringk = "SecurePasswordEncrypter";
@@ -72,16 +73,20 @@ int main()
     std::cout << " END" << std::endl;
     f << " END" << std::endl;
     //delete k;
-    //delete l;
+    //delete l;*/
 
     AES user(128);
-    std::string stringUser, stringKey;
-    std::getline(cin, stringUser, '\n');
-    std::getline(cin, stringKey, '\n');
-    //std::cin >> stringUser >> stringKey;
+    std::string sDomain, sPassword, sKey;
+    std::cout << " > Domain   : ";
+    std::getline(cin, sDomain, '\n');
+    std::cout << " > Password : ";
+    std::getline(cin, sPassword, '\n');
+    std::cout << " > Key      : ";
+    std::getline(cin, sKey, '\n');
+
     unsigned int outLenUser = 0;
-    unsigned char* m = user.EncryptECB(StringToChar(stringUser), stringUser.size() * sizeof(unsigned char), StringToChar(stringKey), outLenUser);
-    unsigned char* n = user.DecryptECB(m, stringUser.size() * sizeof(unsigned char), StringToChar(stringKey));
+    unsigned char* m = user.EncryptECB(StringToChar(sDomain), sDomain.size() * sizeof(unsigned char), StringToChar(sKey), outLenUser);
+    unsigned char* n = user.DecryptECB(m, sDomain.size() * sizeof(unsigned char), StringToChar(sKey));
     std::cout << "encryptedUser : " << CharToString(m, outLenUser) << " : " << CharToString(m, outLenUser).size() << " : " << outLenUser << std::endl;
     std::cout << "decryptedUser : " << CharToString(n, outLenUser) << " : " << CharToString(n, outLenUser).size() << std::endl;
     for(unsigned j = 0; j < outLenUser; j++)
@@ -91,11 +96,28 @@ int main()
     }
     std::cout << " END" << std::endl;
     f << " END" << std::endl;
-    for(unsigned j = 0; j < stringUser.size(); j++)
+    for(unsigned j = 0; j < sDomain.size(); j++)
     {
-        std::cout << stringUser[j] << " ";
+        std::cout << sDomain[j] << " ";
     }
     std::cout << " END" << std::endl;
+
+    /*Credentials newCredentials = {make_pair(StringToChar(sDomain), sDomain.size()), 
+                                  make_pair(StringToChar(sPassword), sPassword.size()),
+                                  StringToChar(sKey)};*/
+    credentialsManager.addCredentials(make_unique<Credentials>
+        (make_pair(StringToChar(sDomain), sDomain.size()),
+         make_pair(StringToChar(sPassword), sPassword.size()),
+         StringToChar(sKey)));
+
+    std::cout << credentialsManager;
+    for(auto& it : credentialsManager.getCredentials())
+    {
+        std::cout << *it << std::endl;
+    }
+
+    fileHandler.writeFile(credentialsManager);
+
     //delete[] m;
     //delete[] n;
 /*

@@ -50,12 +50,12 @@ std::ostream& operator<<(std::ostream& out, const Credentials& credentials)
     return out;
 }
 
-std::pair<unsigned char*, unsigned> Credentials::getDomain()
+std::pair<unsigned char*, unsigned> Credentials::getDomain() const
 {
     return domain_;
 }
 
-std::pair<unsigned char*, unsigned> Credentials::getEncryptedPassword()
+std::pair<unsigned char*, unsigned> Credentials::getEncryptedPassword() const
 {
     return password_;
 }

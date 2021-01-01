@@ -18,8 +18,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, const Credentials& credentials);
 
-    std::pair<unsigned char*, unsigned> getDomain();
-    std::pair<unsigned char*, unsigned> getEncryptedPassword();
+    std::pair<unsigned char*, unsigned> getDomain() const;
+    std::pair<unsigned char*, unsigned> getEncryptedPassword() const;
     std::pair<unsigned char*, unsigned> getDecryptedPassword(unsigned char* key);
 
 private:
