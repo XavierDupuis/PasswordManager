@@ -10,7 +10,7 @@ bool CredentialsManager::addCredentials(std::unique_ptr<Credentials> credentials
     {
         CredentialsError("Credentials with domain name : \"" + CharToString(credentials->getDomain().first) + "\" already registered.").raise();
     }
-    credentialsDomains_.emplace(CharToString(credentials->getDomain().first));
+    credentialsDomains_.emplace(CharToString(credentials->getDomain().first,credentials->getDomain().second));
     //std::unique_ptr<Credentials> newCredentials = std::make_unique<Credentials>(credentials);
     //std::cout << "Add " << *newCredentials << std::endl;
     //credentials_.emplace(move(newCredentials));
@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& out, const CredentialsManager& credential
     out << credentialsManager.credentialsDomains_.size() << " domains registered" << std::endl;
     for(auto& it : credentialsManager.credentialsDomains_)
     {
-        out << "   " << it << std::endl;
+        out << "  " << it << std::endl;
     }
     return out;
 }

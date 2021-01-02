@@ -112,7 +112,7 @@ int main()
     std::cout << credentialsManager;
     for(auto& it : credentialsManager.getCredentials())
     {
-        std::cout << *it << std::endl;
+        std::cout << *it;
     }
 
     fileHandler.writeFile(credentialsManager);
@@ -127,6 +127,32 @@ int main()
 
     //delete[] m;
     //delete[] n;
+
+    std::cout << std::endl << std::endl << std::endl << std::dec; 
+
+    AES encryption(128);
+    std::string stringk = "testtesttesttes";
+    std::string stringkey = "testtesttesttes"; //"h(7*HE'u7vSw_$!F";
+    unsigned int outLenk = 0;
+    unsigned char* k = encryption.EncryptECB(StringToChar(stringk), stringk.size() * sizeof(unsigned char), StringToChar(stringk), outLenk);
+    unsigned char* l = encryption.DecryptECB(k, stringk.size() * sizeof(unsigned char), StringToChar(stringk));
+    std::cout << "kString : " << CharToString(k, outLenk) << " : " << CharToString(k, outLenk).size() << std::endl;
+    std::cout << "lString : " << CharToString(l, outLenk) << " : " << CharToString(l, outLenk).size() << std::endl;
+    unsigned char* ptr = l;
+    for(unsigned i = 0; i < stringk.size(); i++)
+    {
+        std::cout << *ptr++ << " ";
+    }
+    std::cout << " END" << std::endl;
+    unsigned char* ptr2 = l;
+    for(unsigned i = 0; i < outLenk; i++)
+    {
+        std::cout << *ptr2++ << " ";
+        f << (unsigned)*ptr2 << " ";
+    }
+    std::cout << " END" << std::endl;
+    f << " END" << std::endl;
+
 /*
     std::cout << "Plaintext : ";
     for (auto& it : plain)

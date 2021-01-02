@@ -28,12 +28,12 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
         {
             std::istringstream line(rawCredentials);
             line >> std::quoted(domain);
-            cout << domain << std::endl;
+            //cout << domain << std::endl;
             while(line >> std::hex >> value)
             {
                 unsigned char cValue = value;
                 password += cValue;
-                std::cout << std::dec << " " << cValue << " (dec " << unsigned(cValue) << " == hex " << std::hex << unsigned(cValue) <<  ")" <<  " added. Pass : " << password << std::endl;
+                //std::cout << std::dec << " " << cValue << " (dec " << unsigned(cValue) << " == hex " << std::hex << unsigned(cValue) <<  ")" <<  " added. Pass : " << password << std::endl;
             }
             line.ignore();
             credentialsManager.addCredentials(make_unique<Credentials>(make_pair(StringToChar(domain), domain.size()),
