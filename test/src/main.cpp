@@ -122,6 +122,7 @@ int main()
     std::cout << " Key      :\n > ";
     std::getline(cin, sKey, '\n');
     auto output = credentialsManager.findCredentials(sDomain)->getDecryptedPassword(StringToChar(sKey));
+    std::cout << " len output : " << output.second << std::endl;
     std::cout << CharToString(output.first, output.second);
 
     //delete[] m;

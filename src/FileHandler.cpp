@@ -19,23 +19,31 @@ bool FileHandler::readFile(CredentialsManager& credentialsManager)
     std::string domain;
     std::string password;
 
-    unsigned char value1, value2;
+    unsigned value;
     
     //Get each line from .txt
-    while(std::getline(f,rawCredentials)) 
+    while(!ws(f).eof()) 
     {
-        std::istringstream line(rawCredentials);
-        line >> std::quoted(domain);
-        while(line >> std::hex >> value1 >> value2)
+        if(std::getline(f,rawCredentials))
         {
-            unsigned char cValue = value1 * 16 + value2;
-            password += cValue;
-            //std::cout << cValue << "(dec " << unsigned(cValue) << " == hex " << std::hex << unsigned(cValue) <<  ")" <<  " added. Pass : " << password << std::endl;
+            std::istringstream line(rawCredentials);
+            line >> std::quoted(domain);
+            cout << domain << std::endl;
+            while(line >> std::hex >> value)
+            {
+                unsigned char cValue = value;
+                password += cValue;
+                std::cout << std::dec << " " << cValue << " (dec " << unsigned(cValue) << " == hex " << std::hex << unsigned(cValue) <<  ")" <<  " added. Pass : " << password << std::endl;
+            }
+            line.ignore();
+            credentialsManager.addCredentials(make_unique<Credentials>(make_pair(StringToChar(domain), domain.size()),
+                                make_pair(StringToChar(password), password.size())));
+            password.clear();
         }
-        line.ignore();
-        credentialsManager.addCredentials(make_unique<Credentials>(make_pair(StringToChar(domain), domain.size()),
-                            make_pair(StringToChar(password), password.size())));
-        password.clear();
+        else
+        {
+            throw runtime_error("Error while parsing file");
+        }
     }
     f.close();
     return true;
