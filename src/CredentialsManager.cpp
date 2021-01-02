@@ -6,15 +6,12 @@ CredentialsManager::CredentialsManager()
 
 bool CredentialsManager::addCredentials(std::unique_ptr<Credentials> credentials)
 {
-    if (isCredentialsRegistered(CharToString(credentials.get()->getDomain().first)))
+    std::string domain = CharToString(credentials->getDomain().first, credentials->getDomain().second);
+    if (isCredentialsRegistered(domain))
     {
-        CredentialsError("Credentials with domain name : \"" + CharToString(credentials->getDomain().first) + "\" already registered.").raise();
+        CredentialsError("Credentials with domain name : \"" + domain + "\" already registered.").raise();
     }
-    credentialsDomains_.emplace(CharToString(credentials->getDomain().first,credentials->getDomain().second));
-    //std::unique_ptr<Credentials> newCredentials = std::make_unique<Credentials>(credentials);
-    //std::cout << "Add " << *newCredentials << std::endl;
-    //credentials_.emplace(move(newCredentials));
-    //credentials_.emplace(std::make_unique<Credentials>(credentials));
+    credentialsDomains_.emplace(domain);
     credentials_.push_back(move(credentials));
     return true;
 }
@@ -78,7 +75,6 @@ std::vector<unique_ptr<Credentials>>& CredentialsManager::getCredentials()
 
 bool CredentialsManager::isCredentialsRegistered(const Credentials& credentials) const
 {
-    //return (credentialsDomains_.find(CharToString(credentials.getDomain().first)) != credentialsDomains_.end());
     return isCredentialsRegistered(CharToString(credentials.getDomain().first));
 }
 

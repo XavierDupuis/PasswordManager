@@ -17,27 +17,29 @@ int main()
     std::cout << credentialsManager;
 
     std::ofstream f("test.txt");
-    unsigned char plain[] = { 'A', 'B', 'C', 'D', 
+
+    /*unsigned char plain[] = { 'A', 'B', 'C', 'D', 
                               'E', 'F', 'G', 'H', 
                               'I', 'J', 'K', 'L', 
                               'M', 'N', 'O', 'P',  }; //plaintext example
     unsigned char splain[] = { 'A', 'B', 'C', 'D'  }; //plaintext example
-    /*Credentials cred1 = Credentials(make_pair(plain, 16), make_pair(splain, 4));
+
+    Credentials cred1 = Credentials(make_pair(plain, 16), make_pair(splain, 4));
     Credentials cred2 = Credentials(make_pair(splain, 4), make_pair(plain, 16));
     credentialsManager.addCredentials(cred1);
-    credentialsManager.addCredentials(cred2);*/
+    credentialsManager.addCredentials(cred2);
 
-    /*std::string domain1 = "Polytechnique";
+    std::string domain1 = "Polytechnique";
     std::string key1 = "veryBadPassword";
     Credentials cred3 = Credentials(make_pair(StringToChar(domain1), domain1.size()), make_pair(StringToChar(key1), key1.size()));
-    credentialsManager.addCredentials(cred3);*/
+    credentialsManager.addCredentials(cred3);
 
-    /*std::cout << "cred1 : " << cred1;
+    std::cout << "cred1 : " << cred1;
     std::cout << "cred2 : " << cred2;
     std::cout << "cred3 : " << cred3;
-    fileHandler.writeFile(credentialsManager);*/
+    fileHandler.writeFile(credentialsManager);
 
-    /*unsigned char key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
+    unsigned char key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
     unsigned int plainLen = 16;  //bytes in plaintext
     unsigned int outLen = 0;  // out param - bytes in сiphertext
 
@@ -75,17 +77,23 @@ int main()
     //delete k;
     //delete l;*/
 
-    AES user(128);
 
-    //
     std::string sDomain, sPassword, sKey;
+    std::cout << std::dec << "sDomain SIZE : " << sDomain.size() << std::endl;
     std::cout << " Domain   :\n > ";
     std::getline(cin, sDomain, '\n');
+    std::cout << std::dec << "sDomain SIZE : " << sDomain.size() << std::endl;
     std::cout << " Password :\n > ";
     std::getline(cin, sPassword, '\n');
     std::cout << " Key      :\n > ";
     std::getline(cin, sKey, '\n');
+    
+    credentialsManager.addCredentials(make_unique<Credentials>
+        (make_pair(StringToChar(sDomain), sDomain.size()),
+         make_pair(StringToChar(sPassword), sPassword.size()),
+         StringToChar(sKey)));
 
+    AES user(128);
     unsigned int outLenUser = 0;
     unsigned char* m = user.EncryptECB(StringToChar(sDomain), sDomain.size() * sizeof(unsigned char), StringToChar(sKey), outLenUser);
     unsigned char* n = user.DecryptECB(m, sDomain.size() * sizeof(unsigned char), StringToChar(sKey));
@@ -104,10 +112,6 @@ int main()
     }
     std::cout << " END" << std::endl;
 
-    credentialsManager.addCredentials(make_unique<Credentials>
-        (make_pair(StringToChar(sDomain), sDomain.size()),
-         make_pair(StringToChar(sPassword), sPassword.size()),
-         StringToChar(sKey)));
 
     std::cout << credentialsManager;
     for(auto& it : credentialsManager.getCredentials())
@@ -131,8 +135,8 @@ int main()
     std::cout << std::endl << std::endl << std::endl << std::dec; 
 
     AES encryption(128);
-    std::string stringk = "testtesttesttes";
-    std::string stringkey = "testtesttesttes"; //"h(7*HE'u7vSw_$!F";
+    std::string stringk = "testtesttesttestt";
+    std::string stringkey = "testtesttesttestt"; //"h(7*HE'u7vSw_$!F";
     unsigned int outLenk = 0;
     unsigned char* k = encryption.EncryptECB(StringToChar(stringk), stringk.size() * sizeof(unsigned char), StringToChar(stringk), outLenk);
     unsigned char* l = encryption.DecryptECB(k, stringk.size() * sizeof(unsigned char), StringToChar(stringk));
