@@ -16,9 +16,10 @@ class CredentialsManager
 public:
     CredentialsManager();
 
+    void revealCredentials(std::string domain, std::string key);
     bool addCredentials(std::unique_ptr<Credentials> credentials);
-    bool updateCredentials(Credentials& credentials);
-    bool removeCredentials(Credentials& credentials);
+    bool updateCredentials(std::unique_ptr<Credentials> credentials);
+    bool removeCredentials(std::string domain);
 
     Credentials* findCredentials(const std::string& domain);
 

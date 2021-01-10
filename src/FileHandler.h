@@ -12,6 +12,7 @@
 class FileHandler 
 {
 public:
+    FileHandler();
     FileHandler(std::string filename);
     bool readFile(CredentialsManager& credentialsManager);
     bool writeFile(CredentialsManager& credentialsManager);

@@ -77,6 +77,10 @@ int main()
     //delete k;
     //delete l;*/
 
+    std::string rDomain = "asd";
+    credentialsManager.removeCredentials(rDomain);
+
+    std::cout << credentialsManager;
 
     std::string sDomain, sPassword, sKey;
     std::cout << std::dec << "sDomain SIZE : " << sDomain.size() << std::endl;

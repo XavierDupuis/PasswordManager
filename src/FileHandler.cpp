@@ -1,6 +1,10 @@
 #include "FileHandler.h"
 
-FileHandler::FileHandler(std::string filename = "data.txt") 
+FileHandler::FileHandler() : FileHandler("data.txt")
+{
+}
+
+FileHandler::FileHandler(std::string filename) 
     : filename_(filename) 
 {
 }

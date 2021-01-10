@@ -1,16 +1,5 @@
 #include "Utility.h"
 
-std::string CharToString(unsigned char* ptr)
-{
-    std::string cString;
-    while(*ptr != '\0')
-    {
-        cString += *ptr++;
-    }
-    //cString += '\0';
-    return cString;
-}
-
 std::string CharToString(unsigned char* ptr, unsigned int len)
 {
     std::string cString;
@@ -18,7 +7,16 @@ std::string CharToString(unsigned char* ptr, unsigned int len)
     {
         cString += *ptr++;
     }
-    //cString += '\0';
+    return cString;
+}
+
+std::string CharToString(std::pair<unsigned char *, unsigned int> pair)
+{
+    std::string cString;
+    for(int i = 0; i < pair.second; i++)
+    {
+        cString += *pair.first++;
+    }
     return cString;
 }
 
@@ -41,12 +39,3 @@ std::ostream& operator<<(std::ostream& out, unsigned char* ptr)
     }
     return out;
 }
-
-/*std::istream& operator>>(std::istream& in, unsigned char* ptr)
-{
-     while(*ptr != '\0')
-    {
-        in >> *ptr++;
-    }
-    return in;
-}*/
